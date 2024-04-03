@@ -1,5 +1,3 @@
-alert("Olá, seja bem vinda(o) à atividade!")
-
 const meusAlbuns = [
   {
     "nome_do_album": "Kid A",
@@ -180,6 +178,91 @@ function criaListaDeAlbuns(linhas) {
 function atualizaListaDeAlbuns() {
   const listaDeAlbuns = document.getElementById("album-list")
 
-  listaDeAlbuns.replaceWith(criaListaDeAlbuns(organizaEmLinhasEColunas(meusAlbuns)))
+  listaDeAlbuns.replaceWith(criaListaDeAlbuns(organizaEmLinhasEColunas(musicasAleatorias(meusAlbuns))))
 }
 
+function musicasAleatorias(albuns) {
+  if (document.getElementById('shuffleAlbumsBtn').checked) {
+    return albuns.sort(() => Math.random() - 0.5);
+  }
+
+  return albuns
+}
+
+function filtraAlbums(evt) {
+  console.log("clickEvent", evt)
+  evt.preventDefault()
+
+  const filtro = document.getElementById("filtroAlbum").value
+
+  const albums = meusAlbuns.filter(album => 
+    album.nome_do_album.toLowerCase().includes(filtro.toLowerCase()) ||
+    album.nome_da_banda.toLowerCase().includes(filtro.toLowerCase()) ||
+    album.ano_do_album.toString().includes(filtro.toLowerCase())
+  )
+
+  document
+    .getElementById("album-list")
+    .replaceWith(criaListaDeAlbuns(organizaEmLinhasEColunas(
+      musicasAleatorias(albums)
+    )))
+}
+
+function limpaCampos() {
+  document.getElementById("albumName").value = ""
+  document.getElementById("albumArtist").value = ""
+  document.getElementById("albumYear").value = ""
+  document.getElementById("albumCover").value = ""
+}
+
+function insertAlbum(evt) {
+  evt.preventDefault()
+  const nome_do_album = document.getElementById("albumName").value
+  const nome_da_banda = document.getElementById("albumArtist").value
+  const ano_do_album = document.getElementById("albumYear").value
+  const imagem_da_capa_do_album = document.getElementById("albumCover").value
+  meusAlbuns.push({
+    nome_do_album,
+    nome_da_banda,
+    ano_do_album,
+    imagem_da_capa_do_album
+  })
+  atualizaListaDeAlbuns()
+  limpaCampos()
+}
+
+function toggleFormInsertAlbum() {
+  const form = document.getElementById('cFormInsertAlbum')
+  const albumList = document.getElementById('cAlbumList')
+
+  const showBtn = document.getElementById('btnAdicionarAlbumShow')
+  const hideBtn = document.getElementById('btnAdicionarAlbumHide')
+
+  const isHidden = form.style.display === 'none'
+
+  if (isHidden) {
+    form.style.display = 'block'
+    albumList.style.display = 'none'
+    showBtn.style.display = 'none'
+    hideBtn.style.display = 'block'
+  } else {
+    form.style.display = 'none'
+    albumList.style.display = 'block'
+    showBtn.style.display = 'block'
+    hideBtn.style.display = 'none'
+  }
+}
+
+window.onload = function() {
+  atualizaListaDeAlbuns()
+
+  toggleFormInsertAlbum()
+
+  document
+    .getElementById("filtraAlbumBtn")
+    .addEventListener("click", filtraAlbums, false)
+
+  document
+    .getElementById("insertAlbumBtn")
+    .addEventListener("click", insertAlbum, false)
+}
