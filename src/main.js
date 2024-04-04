@@ -1,15 +1,9 @@
-const meusAlbuns = [
+const albuns_padrao = [
   {
     "nome_do_album": "Kid A",
     "nome_da_banda": "Radiohead",
     "ano_do_album": 2000,
     "imagem_da_capa_do_album": "https://upload.wikimedia.org/wikipedia/en/0/02/Radioheadkida.png"
-  },
-  {
-    "nome_do_album": "Is This It",
-    "nome_da_banda": "The Strokes",
-    "ano_do_album": 2001,
-    "imagem_da_capa_do_album": "https://upload.wikimedia.org/wikipedia/en/0/09/The_Strokes_-_Is_This_It_cover.png"
   },
   {
     "nome_do_album": "Hybrid Theory",
@@ -121,6 +115,8 @@ const meusAlbuns = [
   }
 ]
 
+let meusAlbuns = []
+
 function organizaEmLinhasEColunas(albuns) {
   const numeroDeColunas = 3
   const numeroDeLinhas = Math.ceil(albuns.length / numeroDeColunas)
@@ -227,6 +223,8 @@ function insertAlbum(evt) {
     ano_do_album,
     imagem_da_capa_do_album
   })
+
+  localStorage.setItem("albuns", JSON.stringify(meusAlbuns));
   atualizaListaDeAlbuns()
   limpaCampos()
 }
@@ -254,6 +252,14 @@ function toggleFormInsertAlbum() {
 }
 
 window.onload = function() {
+
+  if (localStorage.getItem('albuns') === null) {
+    meusAlbuns = albuns_padrao;
+  } else {
+    meusAlbuns = JSON.parse(localStorage.getItem('albuns'));
+  }
+  console.log(meusAlbuns)
+
   atualizaListaDeAlbuns()
 
   toggleFormInsertAlbum()
@@ -266,3 +272,4 @@ window.onload = function() {
     .getElementById("insertAlbumBtn")
     .addEventListener("click", insertAlbum, false)
 }
+
