@@ -174,6 +174,13 @@ function criaListaDeAlbuns(linhas) {
 function atualizaListaDeAlbuns() {
   const listaDeAlbuns = document.getElementById("album-list")
 
+  if (localStorage.getItem('albuns') === null) {
+    meusAlbuns = albuns_padrao;
+  } else {
+    meusAlbuns = JSON.parse(localStorage.getItem('albuns'));
+  }
+  //console.log(meusAlbuns)
+
   listaDeAlbuns.replaceWith(criaListaDeAlbuns(organizaEmLinhasEColunas(musicasAleatorias(meusAlbuns))))
 }
 
@@ -229,6 +236,11 @@ function insertAlbum(evt) {
   limpaCampos()
 }
 
+window.addEventListener('storage', (e) => {
+  atualizaListaDeAlbuns()
+  limpaCampos()
+})
+
 function toggleFormInsertAlbum() {
   const form = document.getElementById('cFormInsertAlbum')
   const albumList = document.getElementById('cAlbumList')
@@ -252,14 +264,6 @@ function toggleFormInsertAlbum() {
 }
 
 window.onload = function() {
-
-  if (localStorage.getItem('albuns') === null) {
-    meusAlbuns = albuns_padrao;
-  } else {
-    meusAlbuns = JSON.parse(localStorage.getItem('albuns'));
-  }
-  console.log(meusAlbuns)
-
   atualizaListaDeAlbuns()
 
   toggleFormInsertAlbum()
