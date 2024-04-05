@@ -156,7 +156,8 @@ function criaCardHtmlParaAlbum(album) {
 function criaListaHTMLParaAlbum(musicas) {
   return musicas.map((musica) => {
     return `<li class="item-lista-musica list-group-item">
-      ${musica.numero_da_faixa} - ${musica.nome}
+      ${musica.numero_da_faixa} - ${musica.nome} <br>
+      <audio controls src="${musica.media_url}" type="audio/ogg" class="audio-musica"></audio>
     </li>`
   }).join("\n");
 }
@@ -174,6 +175,14 @@ async function atualizarListaMusicas(nome_do_album) {
   const lista_musicas = document.getElementById("lista_musicas");
   lista_musicas.innerHTML = criaListaHTMLParaAlbum(musicas);
   
+}
+
+function stopAudio() {
+  let audios = document.getElementsByClassName("audio-musica");
+  console.log(audios)
+  for (let i = 0; i < audios.length; i++) {
+    audios[i].pause()
+  }
 }
 
 function criaLinhaDeAlbuns(uma_linha) {
@@ -300,5 +309,8 @@ window.onload = function() {
     .getElementById("insertAlbumBtn")
     .addEventListener("click", insertAlbum, false)
 
+  document
+    .getElementById("listaMusicasModal")
+    .addEventListener("hidden.bs.modal", stopAudio)
 }
 
